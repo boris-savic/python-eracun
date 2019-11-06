@@ -4,7 +4,7 @@ Python library that enables you to generate e-Slog (e-Račun) XML in 1.6.1 forma
 
 ## 1. Installation
 
-    $ pip install TODO
+    $ pip install eracun-generator
     
 # 2. Quick Start
 
