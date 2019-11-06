@@ -14,14 +14,15 @@ Python library that enables you to generate e-Slog (e-Račun) XML in 1.6.1 forma
 from eracun_generator.core import Invoice, ReferenceDocument, Business
 
 issuer = Business(name='Company d.o.o.',
-                  address='Our address 100',
+                  address='Our Address 100',
                   zip_code=1000,
                   city='Ljubljana',
                   country='Slovenia',
                   country_iso_code='SI',
                   vat_id='12345678',
                   iban='SI56111122223333456',
-                  bic='BAKOSI2XXXX')
+                  bic='BAKOSI2XXXX',
+                  registration_number='555555555')
 
 recipient = Business(name='Recipient Name',
                      address='Recipient Address 101',
@@ -29,7 +30,10 @@ recipient = Business(name='Recipient Name',
                      city='Ljubljana',
                      country='Slovenia',
                      country_iso_code='SI',
-                     vat_id='87654321')
+                     vat_id='87654321',
+                     iban='SI56111122223333444',
+                     bic='BAKOSI2XXXX',
+                     registration_number='666666666')
 ```
 
 ## 2.2. Create Invoice object

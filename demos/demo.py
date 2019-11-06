@@ -11,7 +11,8 @@ issuer = Business(name='Company d.o.o.',
                   country_iso_code='SI',
                   vat_id='12345678',
                   iban='SI56111122223333456',
-                  bic='BAKOSI2XXXX')
+                  bic='BAKOSI2XXXX',
+                  registration_number='555555555')
 
 recipient = Business(name='Recipient Name',
                      address='Recipient Address 101',
@@ -19,7 +20,10 @@ recipient = Business(name='Recipient Name',
                      city='Ljubljana',
                      country='Slovenia',
                      country_iso_code='SI',
-                     vat_id='87654321')
+                     vat_id='87654321',
+                     iban='SI56111122223333444',
+                     bic='BAKOSI2XXXX',
+                     registration_number='666666666')
 
 invoice = Invoice(
     issuer=issuer,
