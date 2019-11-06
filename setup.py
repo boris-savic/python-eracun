@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name='eracun',
-    packages=['eracun'],
+    name='eracun_generator',
+    packages=['eracun_generator'],
     version='0.1.0',
     description='e-SLOG e-Racun v1.6.1 XML generator',
     author='Boris Savic',
