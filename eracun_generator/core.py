@@ -142,6 +142,7 @@ class Invoice:
                  invoice_function=FUNCTION_ORIGINAL,
                  payment_type=PAYMENT_REQUIRED,
                  payment_purpose="GDSV",
+                 additional_remittance_information=None,
                  location_code=LOCATION_ISSUED):
         # Business objects
         self.issuer = issuer
@@ -171,6 +172,8 @@ class Invoice:
         self.invoice_function = invoice_function
         self.payment_type = payment_type
         self.payment_purpose = payment_purpose
+        self.additional_remittance_information = additional_remittance_information or f'Racun st. {self.invoice_number}'
+
         self.location_code = location_code
 
         self.date_issued_code = '137'

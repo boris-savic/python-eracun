@@ -49,6 +49,33 @@ def convert_invoice_to_envelope(invoice, attachments):
                 },
                 'creditor': _construct_creditor_debtor_data(invoice.issuer, 'creditor'),
                 'debtor': _construct_creditor_debtor_data(invoice.recipient, 'debtor'),
+                'execution_time': {
+                    '_name': 'requested_execution_date',
+                    '_value': invoice.date_issued.strftime('%Y-%m-%d')
+                },
+                'amount': {
+                    '_name': 'amount',
+                    '_value': str(invoice.total_with_tax)
+                },
+                'currency': {
+                    '_name': 'currency',
+                    '_value': invoice.currency
+                },
+                'remittance_information': {
+                    '_name': 'remittance_information',
+                    'creditor_reference': {
+                        '_name': 'creditor_structured_reference',
+                        '_value': invoice.payment_reference
+                    },
+                    'additional_info': {
+                        '_name': 'additional_remittance_information',
+                        '_value': invoice.additional_remittance_information
+                    }
+                },
+                'purpose': {
+                    '_name': 'purpose',
+                    '_value': invoice.payment_purpose
+                }
             },
             'attachments': {
                 '_name': 'attachments',
