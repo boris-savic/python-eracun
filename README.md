@@ -83,3 +83,9 @@ invoice.add_reference_document('NAR-54654', ReferenceDocument.TYPE_ORDER_NUMBER)
 print(invoice.render_xml())
 ```
 
+## 2.3. Get Envelope
+
+```python
+print(invoice.render_envelope(attachments=[('invoice.pdf', 'PDF')]))
+```
+

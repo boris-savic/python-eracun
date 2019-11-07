@@ -3,6 +3,7 @@ from lxml import etree
 
 from eracun_generator.builder import build_xml
 from eracun_generator.definitions import construct_invoice_json
+from eracun_generator.envelope.utils import convert_invoice_to_envelope
 
 
 class Business:
@@ -213,6 +214,29 @@ class Invoice:
                                                unit=unit))
 
         self.total_without_discount = self.total_without_discount + (quantity * price_without_tax)
+
+    def render_envelope(self, attachments=[]):
+        """
+        Render envelope to be included with the eRacun.
+
+        Every Envelope will have eRacun.xml as an attachment. It is recommended to
+        include PDF invoice as an attachment as well.
+
+        To include attachment data in envelope pass in the attachment name and format. For example
+
+        attachments=[('invoice.pdf', 'PDF')]
+
+        :param attachments:
+        :return:
+        """
+
+        attachments.append(('eRacun.xml', 'XML'))
+
+        return ("%s%s" % ('<?xml version="1.0" encoding="UTF-8"?>\n',
+                          etree.tostring(build_xml(convert_invoice_to_envelope(self, attachments)),
+                                         pretty_print=True,
+                                         xml_declaration=False,
+                                         encoding="utf-8").decode('utf-8')))
 
     def render_xml(self):
         return ("%s%s" % ('<?xml version="1.0" encoding="UTF-8"?>\n',

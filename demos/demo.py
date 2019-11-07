@@ -57,3 +57,5 @@ invoice.add_item(
 invoice.add_tax_summary(tax_rate=22, tax_base=1.48, tax_amount=0.33)
 
 print(invoice.render_xml())
+
+print(invoice.render_envelope(attachments=[('invoice.pdf', 'PDF')]))
