@@ -97,7 +97,7 @@ def convert_invoice_to_envelope(invoice, attachments, sender_bic, recipient_bic)
             },
             'size': {
                 '_name': 'size',
-                '_value': '0'
+                '_value': str(attachment[2])
             },
             'type': {
                 '_name': 'type',
