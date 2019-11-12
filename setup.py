@@ -13,5 +13,6 @@ setup(
     classifiers=[],
     install_requires=[
         'lxml>=4.4.1',
+        'signxml>=2.6.0'
     ]
 )

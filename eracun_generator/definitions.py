@@ -9,7 +9,7 @@ def construct_invoice_json(invoice):
         '_attrs': [("{%s}noNamespaceSchemaLocation" % NS, 'http://www.gzs.si/e-poslovanje/sheme/eSLOG_1-6_EnostavniRacun.xsd')],
         '_ns': {
             'ds': 'http://www.w3.org/2000/09/xmldsig#',
-            'xds': 'http://uri.etsi.org/01903/v1.1.1#',
+            'xsd': 'http://uri.etsi.org/01903/v1.1.1#',
             'xsi': NS
         },
         'invoice': {

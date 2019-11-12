@@ -1,9 +1,11 @@
 from decimal import Decimal
+
 from lxml import etree
 
 from eracun_generator.builder import build_xml
 from eracun_generator.definitions import construct_invoice_json
 from eracun_generator.envelope.utils import convert_invoice_to_envelope
+from eracun_generator.utils import ds_tag, sign_invoice
 
 
 class Business:
@@ -241,9 +243,15 @@ class Invoice:
                                          xml_declaration=False,
                                          encoding="utf-8").decode('utf-8')))
 
-    def render_xml(self):
+    def render_xml(self, key=None, cert=None):
+        xml_content = build_xml(construct_invoice_json(self))
+
+        if key and cert:
+            xml_content = sign_invoice(construct_invoice_json(self), key, cert)
+
         return ("%s%s" % ('<?xml version="1.0" encoding="UTF-8"?>\n',
-                          etree.tostring(build_xml(construct_invoice_json(self)),
-                                         pretty_print=True,
+                          etree.tostring(xml_content,
+                                         pretty_print=False,
                                          xml_declaration=False,
-                                         encoding="utf-8").decode('utf-8')))
+                                         method="c14n",
+                                         ).decode('utf-8')))
