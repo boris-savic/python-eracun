@@ -26,9 +26,6 @@ def sign_invoice(invoice_json, key, cert):
                                                                                                   key=key,
                                                                                                   cert=cert,
                                                                                                   reference_uri=['data','signprops'])
-    ds_object = signed_xml[2]
-    signed_xml.remove(ds_object)
-    signed_xml[1].append(ds_object)
 
     signed_xml[1].attrib['Id'] = 'signature'
 
@@ -48,7 +45,7 @@ def add_temp_sign_data(key, cert, invoice_json, signed_props_id='signprops'):
         '_attrs': [('Id', 'placeholder')]
     }
 
-    invoice_json['sign_temp_data'] = {
+    invoice_json['signature_placeholder']['sign_temp_data'] = {
         '_name': ds_tag('Object'),
         'qualifying_props': {
             '_name': 'QualifyingProperties',
