@@ -239,7 +239,7 @@ class Invoice:
         :return:
         """
 
-        attachments.append(('eRacun.xml', 'XML'))
+        attachments.insert(0, ('eRacun.xml', 'XML'))
 
         return ("%s%s" % ('<?xml version="1.0" encoding="UTF-8"?>\n',
                           etree.tostring(build_xml(convert_invoice_to_envelope(self, attachments, sender_bic, recipient_bic)),
