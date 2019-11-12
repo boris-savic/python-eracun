@@ -220,7 +220,7 @@ class Invoice:
 
         self.total_without_discount = self.total_without_discount + (quantity * price_without_tax)
 
-    def render_envelope(self, attachments=[]):
+    def render_envelope(self, attachments=[], sender_bic=None, recipient_bic=None):
         """
         Render envelope to be included with the eRacun.
 
@@ -232,13 +232,17 @@ class Invoice:
         attachments=[('invoice.pdf', 'PDF')]
 
         :param attachments:
+        :param sender_bic: Set to UJPLSI20ICL for DEV environment and UJPLSI2DICL for production environment if
+                           the issuer is government budget user.
+        :param recipient_bic: Set to UJPLSI20ICL for DEV environment and UJPLSI2DICL for production environment if
+                              the recipient is government budget user.
         :return:
         """
 
         attachments.append(('eRacun.xml', 'XML'))
 
         return ("%s%s" % ('<?xml version="1.0" encoding="UTF-8"?>\n',
-                          etree.tostring(build_xml(convert_invoice_to_envelope(self, attachments)),
+                          etree.tostring(build_xml(convert_invoice_to_envelope(self, attachments, sender_bic, recipient_bic)),
                                          pretty_print=True,
                                          xml_declaration=False,
                                          encoding="utf-8").decode('utf-8')))

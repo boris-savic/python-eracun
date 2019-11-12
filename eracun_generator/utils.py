@@ -27,6 +27,11 @@ def sign_invoice(invoice_json, key, cert):
                                                                                                   cert=cert,
                                                                                                   reference_uri=['data','signprops'])
 
+    ds_object = signed_xml[1][0]
+
+    signed_xml[1].remove(ds_object)
+    signed_xml[1].append(ds_object)
+
     signed_xml[1].attrib['Id'] = 'signature'
 
     return signed_xml
@@ -78,12 +83,12 @@ def add_temp_sign_data(key, cert, invoice_json, signed_props_id='signprops'):
                                 '_name': 'IssuerSerial',
                                 'name': {
                                     '_name': 'X509IssuerName',
-                                    '_attrs': [('xmlns', 'http://www.w3.org/2000/09/xmldsig#')],
+                                   # '_attrs': [('xmlns', 'http://www.w3.org/2000/09/xmldsig#')],
                                     '_value': pem_cert.subject.rfc4514_string()
                                 },
                                 'serial': {
                                     '_name': 'X509SerialNumber',
-                                    '_attrs': [('xmlns', 'http://www.w3.org/2000/09/xmldsig#')],
+                                   # '_attrs': [('xmlns', 'http://www.w3.org/2000/09/xmldsig#')],
                                     '_value': str(pem_cert.serial_number)
                                 }
                             }
