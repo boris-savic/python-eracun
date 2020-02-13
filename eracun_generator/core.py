@@ -3,7 +3,7 @@ from decimal import Decimal
 from lxml import etree
 
 from eracun_generator.builder import build_xml
-from eracun_generator.definitions import construct_invoice_json
+from eracun_generator.definitionsV2 import construct_invoice_json
 from eracun_generator.envelope.utils import convert_invoice_to_envelope
 from eracun_generator.utils import ds_tag, sign_invoice
 
@@ -62,9 +62,11 @@ class InvoiceItem:
                  total_with_tax,
                  total_without_tax,
                  tax_rate,
+                 tax_rate_type='S',
                  discount_percentage=None,
                  discount_amount=None,
-                 unit='PCE'):
+                 unit='PCE',
+                 ean=''):
         self.row_number = row_number
         self.item_name = item_name
         self.quantity = quantity
@@ -77,18 +79,21 @@ class InvoiceItem:
         self.discount_amount = discount_amount
 
         self.tax_rate = tax_rate
+        self.tax_rate_type = tax_rate_type
 
         self.unit = unit
+        self.ean = ean
 
         self.item_description_code = 'F'
         self.quantity_type = '47'
 
 
 class TaxSummary:
-    def __init__(self, tax_rate, tax_amount, tax_base):
+    def __init__(self, tax_rate, tax_amount, tax_base, tax_type='S'):
         self.tax_rate = tax_rate
         self.tax_amount = tax_amount
         self.tax_base = tax_base
+        self.tax_type = tax_type
 
 
 class Invoice:
@@ -204,6 +209,7 @@ class Invoice:
                  total_with_tax,
                  total_without_tax,
                  tax_rate,
+                 ean,
                  discount_percentage=None,
                  discount_amount=None,
                  unit='PCE'):
@@ -214,6 +220,7 @@ class Invoice:
                                                total_with_tax=total_with_tax,
                                                total_without_tax=total_without_tax,
                                                tax_rate=tax_rate,
+                                               ean=ean,
                                                discount_percentage=discount_percentage,
                                                discount_amount=discount_amount,
                                                unit=unit))
