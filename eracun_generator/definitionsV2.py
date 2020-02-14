@@ -14,7 +14,7 @@ def construct_invoice_json(invoice):
         '_ns': {
             'xs4xs': 'http://www.w3.org/2001/XMLSchema',
             'in':'http://uri.etsi.org/01903/v1.1.1#',
-            'io':'http://www.w3.org/2000/09/xmldsig#',
+            'ds':'http://www.w3.org/2000/09/xmldsig#',
             'xsi': NS
         },
         'invoice': {

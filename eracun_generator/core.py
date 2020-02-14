@@ -3,7 +3,8 @@ from decimal import Decimal
 from lxml import etree
 
 from eracun_generator.builder import build_xml
-from eracun_generator.definitionsV2 import construct_invoice_json
+from eracun_generator.definitions import construct_invoice_json
+from eracun_generator.definitionsV2 import construct_invoice_json as construct_invoice_jsonV2
 from eracun_generator.envelope.utils import convert_invoice_to_envelope
 from eracun_generator.utils import ds_tag, sign_invoice
 
@@ -254,15 +255,28 @@ class Invoice:
                                          xml_declaration=False,
                                          encoding="utf-8").decode('utf-8')))
 
-    def render_xml(self, key=None, cert=None):
-        xml_content = build_xml(construct_invoice_json(self))
+    def render_xml(self, key=None, cert=None, v2=True):
+        if v2:
+            xml_content = build_xml(construct_invoice_jsonV2(self))
 
-        if key and cert:
-            xml_content = sign_invoice(construct_invoice_json(self), key, cert)
+            if key and cert:
+                xml_content = sign_invoice(construct_invoice_jsonV2(self), key, cert)
 
-        return ("%s%s" % ('<?xml version="1.0" encoding="UTF-8"?>\n',
-                          etree.tostring(xml_content,
-                                         pretty_print=False,
-                                         xml_declaration=False,
-                                         method="c14n",
-                                         ).decode('utf-8')))
+            return ("%s%s" % ('<?xml version="1.0" encoding="UTF-8"?>\n',
+                            etree.tostring(xml_content,
+                                            pretty_print=False,
+                                            xml_declaration=False,
+                                            method="c14n",
+                                            ).decode('utf-8')))
+        else :
+            xml_content = build_xml(construct_invoice_json(self))
+
+            if key and cert:
+                xml_content = sign_invoice(construct_invoice_json(self), key, cert)
+
+            return ("%s%s" % ('<?xml version="1.0" encoding="UTF-8"?>\n',
+                            etree.tostring(xml_content,
+                                            pretty_print=False,
+                                            xml_declaration=False,
+                                            method="c14n",
+                                            ).decode('utf-8')))
