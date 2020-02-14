@@ -209,7 +209,7 @@ class Invoice:
                  total_with_tax,
                  total_without_tax,
                  tax_rate,
-                 ean,
+                 ean=None,
                  discount_percentage=None,
                  discount_amount=None,
                  unit='PCE'):

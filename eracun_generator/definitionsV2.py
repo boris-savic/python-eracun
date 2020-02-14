@@ -544,17 +544,6 @@ def construct_item_data(item):
             'row_num': {
                 '_name': 'D_1082',
                 '_value': str(item.row_number)
-            },
-            'ean': {
-                '_name': 'C_C212',
-                'code':{
-                    '_name': 'D_7140',
-                    '_value': str(item.ean)
-                },
-                'type':{
-                    '_name': 'D_7143',
-                    '_value': '0160' # type ean
-                }
             }
         },
         'description': {
@@ -680,6 +669,19 @@ def construct_item_data(item):
             }
         }
     }
+
+    if item.ean != None:
+        data['info']['ean'] = {
+            '_name': 'C_C212',
+            'code':{
+                '_name': 'D_7140',
+                '_value': str(item.ean)
+            },
+            'type':{
+                '_name': 'D_7143',
+                '_value': '0160' # type ean
+            }
+        }
 
     price_wo_tax = item.price_without_tax
     if item.discount_percentage:
