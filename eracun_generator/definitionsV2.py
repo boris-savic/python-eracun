@@ -292,7 +292,7 @@ def construct_company_data(business, business_type='II'):
                 },
                 'owner':{
                     '_name': 'D_3192',
-                    '_value': business.name
+                    '_value': business.name[:34]
                 }
             },
             'bank_account_info2': {

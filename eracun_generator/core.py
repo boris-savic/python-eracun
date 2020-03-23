@@ -228,7 +228,7 @@ class Invoice:
 
         self.total_without_discount = self.total_without_discount + (quantity * price_without_tax)
 
-    def render_envelope(self, attachments=[], sender_bic=None, recipient_bic=None):
+    def render_envelope(self, attachments=None, sender_bic=None, recipient_bic=None):
         """
         Render envelope to be included with the eRacun.
 
@@ -246,6 +246,8 @@ class Invoice:
                               the recipient is government budget user.
         :return:
         """
+        if attachments is None:
+            attachments = []
 
         attachments.insert(0, ('eRacun.xml', 'XML', 0))
 
