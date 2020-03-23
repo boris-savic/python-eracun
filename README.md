@@ -1,6 +1,6 @@
 # Python e-Račun
 
-Python library that enables you to generate e-Slog (e-Račun) XML in 1.6.1 format. 
+Python library that enables you to generate e-Slog (e-Račun) XML in 1.6.1 and 2.0 format. 
 
 ## 1. Installation
 
@@ -80,7 +80,7 @@ invoice.add_tax_summary(tax_rate=22, tax_base=1.48, tax_amount=0.33)
 invoice.add_reference_document('NAR-54654', ReferenceDocument.TYPE_ORDER_NUMBER)
 
 # Print XML 
-print(invoice.render_xml())
+print(invoice.render_xml(v2=True)) # set v2 parameter to False to use e-Slog v1.6.1
 ```
 
 ## 2.3. Get Envelope

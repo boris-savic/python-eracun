@@ -47,6 +47,7 @@ invoice.add_item(
     row_number=1,
     item_name='CocaCola 0.33L',
     quantity=Decimal('2.00'),
+    ean='12345678',
     price_without_tax=Decimal('0.82'),
     total_with_tax=Decimal('1.81'),
     total_without_tax=Decimal('1.48'),
@@ -56,6 +57,12 @@ invoice.add_item(
 
 invoice.add_tax_summary(tax_rate=22, tax_base=1.48, tax_amount=0.33)
 
-print(invoice.render_xml())
+#print(invoice.render_xml())
 
-print(invoice.render_envelope(attachments=[('invoice.pdf', 'PDF')]))
+with open('demos/cert/example.pem', 'rb') as cert:
+    with open('demos/cert/example.key', 'rb') as key:
+        c=cert.read()
+        k=key.read()
+        print(invoice.render_xml(cert=c, key=k))
+
+print(invoice.render_envelope(attachments=[('invoice.pdf', 'PDF', 0)]))

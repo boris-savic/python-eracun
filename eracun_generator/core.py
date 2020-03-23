@@ -4,6 +4,7 @@ from lxml import etree
 
 from eracun_generator.builder import build_xml
 from eracun_generator.definitions import construct_invoice_json
+from eracun_generator.definitionsV2 import construct_invoice_json as construct_invoice_jsonV2
 from eracun_generator.envelope.utils import convert_invoice_to_envelope
 from eracun_generator.utils import ds_tag, sign_invoice
 
@@ -62,9 +63,11 @@ class InvoiceItem:
                  total_with_tax,
                  total_without_tax,
                  tax_rate,
+                 tax_rate_type='S',
                  discount_percentage=None,
                  discount_amount=None,
-                 unit='PCE'):
+                 unit='PCE',
+                 ean=''):
         self.row_number = row_number
         self.item_name = item_name
         self.quantity = quantity
@@ -77,18 +80,21 @@ class InvoiceItem:
         self.discount_amount = discount_amount
 
         self.tax_rate = tax_rate
+        self.tax_rate_type = tax_rate_type
 
         self.unit = unit
+        self.ean = ean
 
         self.item_description_code = 'F'
         self.quantity_type = '47'
 
 
 class TaxSummary:
-    def __init__(self, tax_rate, tax_amount, tax_base):
+    def __init__(self, tax_rate, tax_amount, tax_base, tax_type='S'):
         self.tax_rate = tax_rate
         self.tax_amount = tax_amount
         self.tax_base = tax_base
+        self.tax_type = tax_type
 
 
 class Invoice:
@@ -204,6 +210,7 @@ class Invoice:
                  total_with_tax,
                  total_without_tax,
                  tax_rate,
+                 ean=None,
                  discount_percentage=None,
                  discount_amount=None,
                  unit='PCE'):
@@ -214,6 +221,7 @@ class Invoice:
                                                total_with_tax=total_with_tax,
                                                total_without_tax=total_without_tax,
                                                tax_rate=tax_rate,
+                                               ean=ean,
                                                discount_percentage=discount_percentage,
                                                discount_amount=discount_amount,
                                                unit=unit))
@@ -247,15 +255,28 @@ class Invoice:
                                          xml_declaration=False,
                                          encoding="utf-8").decode('utf-8')))
 
-    def render_xml(self, key=None, cert=None):
-        xml_content = build_xml(construct_invoice_json(self))
+    def render_xml(self, key=None, cert=None, v2=True):
+        if v2:
+            xml_content = build_xml(construct_invoice_jsonV2(self))
 
-        if key and cert:
-            xml_content = sign_invoice(construct_invoice_json(self), key, cert)
+            if key and cert:
+                xml_content = sign_invoice(construct_invoice_jsonV2(self), key, cert)
 
-        return ("%s%s" % ('<?xml version="1.0" encoding="UTF-8"?>\n',
-                          etree.tostring(xml_content,
-                                         pretty_print=False,
-                                         xml_declaration=False,
-                                         method="c14n",
-                                         ).decode('utf-8')))
+            return ("%s%s" % ('<?xml version="1.0" encoding="UTF-8"?>\n',
+                            etree.tostring(xml_content,
+                                            pretty_print=False,
+                                            xml_declaration=False,
+                                            method="c14n",
+                                            ).decode('utf-8')))
+        else :
+            xml_content = build_xml(construct_invoice_json(self))
+
+            if key and cert:
+                xml_content = sign_invoice(construct_invoice_json(self), key, cert)
+
+            return ("%s%s" % ('<?xml version="1.0" encoding="UTF-8"?>\n',
+                            etree.tostring(xml_content,
+                                            pretty_print=False,
+                                            xml_declaration=False,
+                                            method="c14n",
+                                            ).decode('utf-8')))
