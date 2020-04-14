@@ -417,18 +417,21 @@ def construct_payment_reference_data(payment_reference):
 
 def construct_reference_document_data(reference_document):
     reference_doc_data = {
-        '_name': 'G_SG1',
+        '_name': 'G_SG2',
         'wrapper':{
-            '_name': 'S_RFF',
+            '_name': 'G_SG3',
             'wrapper':{
-                '_name': 'C_C506',
-                'document_type': {
-                    '_name': 'D_1153',
-                    '_value': reference_document.type_code
-                },
-                'document_number': {
-                    '_name': 'D_1154',
-                    '_value': reference_document.document_number
+                '_name': 'S_RFF',
+                'wrapper':{
+                    '_name': 'C_C506',
+                    'document_type': {
+                        '_name': 'D_1153',
+                        '_value': reference_document.type_code
+                    },
+                    'document_number': {
+                        '_name': 'D_1154',
+                        '_value': reference_document.document_number
+                    }
                 }
             }
         }
