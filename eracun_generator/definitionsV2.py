@@ -27,9 +27,9 @@ def construct_invoice_json(invoice):
             'date_of_service': construct_date_data(invoice.date_of_service_code, invoice.date_of_service),
             'payment_type': construct_payment_type_data(invoice),
             'payment_purpose': construct_payment_purpose_data(invoice),
-            'issuer': construct_company_data(invoice.issuer, 'II'),
+            'issuer': construct_company_data(invoice.issuer, 'SE'),
             'buyer': construct_company_data(invoice.recipient, 'BY'),
-            'recipient': construct_company_data(invoice.recipient, 'IV'),
+            #'recipient': construct_company_data(invoice.recipient, 'IV'),
             'currency': construct_currency_data(invoice.currency),
             'payment_terms': construct_payment_terms_data(invoice.date_due_code, invoice.date_due),
             'payment_data': construct_payment_data(invoice.total_with_tax)
@@ -214,7 +214,7 @@ def construct_location_data(location_code, location_address): # does not transla
 
     return location
 
-def construct_company_data(business, business_type='II'):
+def construct_company_data(business, business_type='SE'):
     data = {
         '_name': 'G_SG2',
         'info1': {
@@ -282,7 +282,7 @@ def construct_company_data(business, business_type='II'):
             '_name': 'S_FII',
             'type':{
                 '_name': 'D_3035',
-                '_value': 'BB'
+                '_value': 'RB'
             },
             'bank_account_info1': {
                 '_name': 'C_C078',
