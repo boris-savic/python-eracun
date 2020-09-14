@@ -45,8 +45,7 @@ def construct_invoice_json(invoice):
         data['invoice'][f"reference_document_{i}"] = construct_reference_document_data(reference_document)
 
     if invoice.global_discount_amount:
-        data['invoice']['global_discount'] = construct_global_discount_data(invoice.global_discount_amount,
-                                                                            invoice.global_discount_percentage)
+        data['invoice']['global_discount'] = construct_global_discount_data(invoice.global_discount_amount, invoice.global_discount_percentage)
 
     if invoice.intro_text:
         data['invoice']['intro_text'] = construct_custom_text_data('GEN', invoice.intro_text)
@@ -59,16 +58,13 @@ def construct_invoice_json(invoice):
 
     # add final sums to invoice
     # Total without discount
-    data['invoice']['sums_without_discounts'] = construct_sums_data(amount=invoice.total_without_discount,
-                                                                    sum_type='79')
+    data['invoice']['sums_without_discounts'] = construct_sums_data(amount=invoice.total_without_discount, sum_type='79')
     # Discounts amount
-    data['invoice']['sums_discounts'] = construct_sums_data(
-        amount=invoice.total_without_discount - invoice.total_without_tax, sum_type='260')
+    data['invoice']['sums_discounts'] = construct_sums_data(amount=invoice.total_without_discount - invoice.total_without_tax, sum_type='260')
     # Tax base sums
     data['invoice']['sums_tax_base_amount'] = construct_sums_data(amount=invoice.total_without_tax, sum_type='389')
     # Taxes amount
-    data['invoice']['sums_taxes'] = construct_sums_data(amount=invoice.total_with_tax - invoice.total_without_tax,
-                                                        sum_type='259')
+    data['invoice']['sums_taxes'] = construct_sums_data(amount=invoice.total_with_tax - invoice.total_without_tax, sum_type='259')
     # Total amount - with taxes
     data['invoice']['sums_total_amount'] = construct_sums_data(amount=invoice.total_with_tax, sum_type='388')
 
@@ -296,7 +292,7 @@ def construct_company_data(business, business_type='SE'):
             '_name': 'S_FII',
             'type': {
                 '_name': 'D_3035',
-                '_value': 'RB'
+                '_value': 'RB' if business_type == 'SE' else 'BB'  # RB - Receiving Bank or BB - Buyer Bank
             },
             'bank_account_info1': {
                 '_name': 'C_C078',
@@ -346,7 +342,7 @@ def construct_company_data(business, business_type='SE'):
                     '_name': 'C_C506',
                     'type': {
                         '_name': 'D_1153',
-                        '_value': 'GN'
+                        '_value': '0199'
                     },
                     'vat': {
                         '_name': 'D_1154',
@@ -870,7 +866,7 @@ def construct_tax_summary_data(tax_summary):
     return data
 
 
-def construct_sums_data(amount, sum_type, ref=None):
+def construct_sums_data(amount, sum_type):
     data = {
         '_name': 'G_SG50',
         'amounts': {
