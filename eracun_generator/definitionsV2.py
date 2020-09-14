@@ -64,7 +64,7 @@ def construct_invoice_json(invoice):
     # Tax base sums
     data['invoice']['sums_tax_base_amount'] = construct_sums_data(amount=invoice.total_without_tax, sum_type='389')
     # Taxes amount
-    data['invoice']['sums_taxes'] = construct_sums_data(amount=invoice.total_with_tax - invoice.total_without_tax, sum_type='259')
+    data['invoice']['sums_taxes'] = construct_sums_data(amount=invoice.total_with_tax - invoice.total_without_tax, sum_type='176')
     # Total amount - with taxes
     data['invoice']['sums_total_amount'] = construct_sums_data(amount=invoice.total_with_tax, sum_type='388')
 
