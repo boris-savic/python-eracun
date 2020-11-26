@@ -323,7 +323,7 @@ def construct_company_data(business, business_type='SE'):
                     '_name': 'C_C506',
                     'type': {
                         '_name': 'D_1153',
-                        '_value': 'VA'
+                        '_value': 'AHP'
                     },
                     'vat': {
                         '_name': 'D_1154',
