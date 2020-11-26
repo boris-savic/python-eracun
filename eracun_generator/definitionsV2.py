@@ -13,14 +13,16 @@ def construct_invoice_json(invoice):
         ],
         '_ns': {
             'xs4xs': 'http://www.w3.org/2001/XMLSchema',
-            'in':'http://uri.etsi.org/01903/v1.1.1#',
-            'ds':'http://www.w3.org/2000/09/xmldsig#',
+            'in': 'http://uri.etsi.org/01903/v1.1.1#',
+            'ds': 'http://www.w3.org/2000/09/xmldsig#',
             'xsi': NS
         },
         'invoice': {
             '_name': 'M_INVOIC',
             '_attrs': [('Id', 'data')],
-            '_sorting':['S_UNH', 'S_BGM', 'S_DTM', 'S_PAI', 'S_ALI', 'S_FTX', 'G_SG1', 'G_SG2', 'G_SG6', 'G_SG7', 'G_SG8', 'G_SG9', 'G_SG12', 'G_SG14', 'G_SG16', 'G_SG24', 'G_SG26', 'S_UNS', 'S_CNT', 'G_SG50', 'G_SG52', 'G_SG53', 'S_UNT'],
+            '_sorting': ['S_UNH', 'S_BGM', 'S_DTM', 'S_PAI', 'S_ALI', 'S_FTX', 'G_SG1', 'G_SG2', 'G_SG6', 'G_SG7',
+                         'G_SG8', 'G_SG9', 'G_SG12', 'G_SG14', 'G_SG16', 'G_SG24', 'G_SG26', 'S_UNS', 'S_CNT', 'G_SG50',
+                         'G_SG52', 'G_SG53', 'S_UNT'],
             'document_header': construct_document_header_data(invoice),
             'header': construct_header_data(invoice),
             'date_issued': construct_date_data(invoice.date_issued_code, invoice.date_issued),
@@ -29,7 +31,7 @@ def construct_invoice_json(invoice):
             'payment_purpose': construct_payment_purpose_data(invoice),
             'issuer': construct_company_data(invoice.issuer, 'SE'),
             'buyer': construct_company_data(invoice.recipient, 'BY'),
-            #'recipient': construct_company_data(invoice.recipient, 'IV'),
+            # 'recipient': construct_company_data(invoice.recipient, 'IV'),
             'currency': construct_currency_data(invoice.currency),
             'payment_terms': construct_payment_terms_data(invoice.date_due_code, invoice.date_due),
             'payment_data': construct_payment_data(invoice.total_with_tax)
@@ -62,7 +64,7 @@ def construct_invoice_json(invoice):
     # Tax base sums
     data['invoice']['sums_tax_base_amount'] = construct_sums_data(amount=invoice.total_without_tax, sum_type='389')
     # Taxes amount
-    data['invoice']['sums_taxes'] = construct_sums_data(amount=invoice.total_with_tax - invoice.total_without_tax, sum_type='259')
+    data['invoice']['sums_taxes'] = construct_sums_data(amount=invoice.total_with_tax - invoice.total_without_tax, sum_type='176')
     # Total amount - with taxes
     data['invoice']['sums_total_amount'] = construct_sums_data(amount=invoice.total_with_tax, sum_type='388')
 
@@ -71,28 +73,29 @@ def construct_invoice_json(invoice):
 
     return data
 
+
 def construct_document_header_data(invoice):
     header = {
         '_name': 'S_UNH',
-        'invoice_no':{
+        'invoice_no': {
             '_name': 'D_0062',
-            '_value': invoice.invoice_number
+            '_value': invoice.invoice_number[-14:]  # last 14 chars if longer...else whole string
         },
-        'data':{
-            '_name':'C_S009',
-            'val1':{
+        'data': {
+            '_name': 'C_S009',
+            'val1': {
                 '_name': 'D_0065',
                 '_value': 'INVOIC'
             },
-            'val2':{
+            'val2': {
                 '_name': 'D_0052',
                 '_value': 'D'
             },
-            'val3':{
+            'val3': {
                 '_name': 'D_0054',
                 '_value': '01B'
             },
-            'val4':{
+            'val4': {
                 '_name': 'D_0051',
                 '_value': 'UN'
             }
@@ -102,19 +105,20 @@ def construct_document_header_data(invoice):
 
     return header
 
+
 def construct_header_data(invoice):
     header = {
         '_name': 'S_BGM',
         'invoice_type': {
             '_name': 'C_C002',
-            'value_tag':{
+            'value_tag': {
                 '_name': 'D_1001',
                 '_value': invoice.invoice_type,
             }
         },
         'invoice_number': {
             '_name': 'C_C106',
-            'value_tag':{
+            'value_tag': {
                 '_name': 'D_1004',
                 '_value': invoice.invoice_number,
             }
@@ -122,6 +126,7 @@ def construct_header_data(invoice):
     }
 
     return header
+
 
 def construct_payment_type_data(invoice):
     header = {
@@ -132,7 +137,7 @@ def construct_payment_type_data(invoice):
         },
         'value': {
             '_name': 'C_C108',
-            'value_tag':{
+            'value_tag': {
                 '_name': 'D_4440',
                 '_value': invoice.payment_type,
             }
@@ -141,17 +146,18 @@ def construct_payment_type_data(invoice):
 
     return header
 
+
 def construct_payment_purpose_data(invoice):
     header = {
         '_name': 'S_FTX',
         'key': {
             '_name': 'D_4451',
             '_value': 'ALQ'
-            
+
         },
         'value': {
             '_name': 'C_C108',
-            'value_tag':{
+            'value_tag': {
                 '_name': 'D_4440',
                 '_value': invoice.payment_purpose,
             }
@@ -159,6 +165,7 @@ def construct_payment_purpose_data(invoice):
     }
 
     return header
+
 
 def construct_date_data(date_code, date):
     date = {
@@ -178,12 +185,13 @@ def construct_date_data(date_code, date):
 
     return date
 
+
 def construct_currency_data(currency):
     currency = {
         '_name': 'G_SG7',
-        'wrapper':{
+        'wrapper': {
             '_name': 'S_CUX',
-            'wrapper':{
+            'wrapper': {
                 '_name': 'C_C504',
                 'currency_type': {
                     '_name': 'D_6347',
@@ -199,7 +207,8 @@ def construct_currency_data(currency):
 
     return currency
 
-def construct_location_data(location_code, location_address): # does not translate
+
+def construct_location_data(location_code, location_address):  # does not translate
     location = {
         '_name': 'Lokacije',
         'location_code': {
@@ -214,12 +223,13 @@ def construct_location_data(location_code, location_address): # does not transla
 
     return location
 
+
 def construct_company_data(business, business_type='SE'):
     data = {
         '_name': 'G_SG2',
         'info1': {
             '_name': 'S_NAD',
-            'business_type' :{
+            'business_type': {
                 '_name': 'D_3035',
                 '_value': business_type
             },
@@ -280,9 +290,9 @@ def construct_company_data(business, business_type='SE'):
     if business.iban:
         data['financial_info'] = {
             '_name': 'S_FII',
-            'type':{
+            'type': {
                 '_name': 'D_3035',
-                '_value': 'RB'
+                '_value': 'RB' if business_type == 'SE' else 'BB'  # RB - Receiving Bank or BB - Buyer Bank
             },
             'bank_account_info1': {
                 '_name': 'C_C078',
@@ -290,7 +300,7 @@ def construct_company_data(business, business_type='SE'):
                     '_name': 'D_3194',
                     '_value': business.iban
                 },
-                'owner':{
+                'owner': {
                     '_name': 'D_3192',
                     '_value': business.name[:34]
                 }
@@ -307,9 +317,9 @@ def construct_company_data(business, business_type='SE'):
     if business.vat_id:
         data['vat_id'] = {
             '_name': 'G_SG3',
-            'wrapper':{
+            'wrapper': {
                 '_name': 'S_RFF',
-                'wrapper':{
+                'wrapper': {
                     '_name': 'C_C506',
                     'type': {
                         '_name': 'D_1153',
@@ -326,13 +336,13 @@ def construct_company_data(business, business_type='SE'):
     if business.registration_number:
         data['registration_number'] = {
             '_name': 'G_SG3',
-            'wrapper':{
+            'wrapper': {
                 '_name': 'S_RFF',
-                'wrapper':{
+                'wrapper': {
                     '_name': 'C_C506',
                     'type': {
                         '_name': 'D_1153',
-                        '_value': 'GN'
+                        '_value': '0199'
                     },
                     'vat': {
                         '_name': 'D_1154',
@@ -343,6 +353,7 @@ def construct_company_data(business, business_type='SE'):
         }
 
     return data
+
 
 def construct_payment_terms_data(date_due_code, date_due):
     payment_terms = {
@@ -356,7 +367,7 @@ def construct_payment_terms_data(date_due_code, date_due):
         },
         'term_due': {
             '_name': 'S_DTM',
-            'wrapper':{
+            'wrapper': {
                 '_name': 'C_C507',
                 'term_due_type': {
                     '_name': 'D_2005',
@@ -372,12 +383,13 @@ def construct_payment_terms_data(date_due_code, date_due):
 
     return payment_terms
 
+
 def construct_payment_data(total_with_tax):
     reference = {
         '_name': 'G_SG50',
         'invoice_amounts': {
             '_name': 'S_MOA',
-            'wrapper':{
+            'wrapper': {
                 '_name': 'C_C516',
                 'type': {
                     '_name': 'D_5025',
@@ -393,13 +405,14 @@ def construct_payment_data(total_with_tax):
 
     return reference
 
+
 def construct_payment_reference_data(payment_reference):
     reference = {
         '_name': 'G_SG1',
         'reference': {
             '_name': 'S_RFF',
-            'wrapper':{
-                '_name':'C_C506',
+            'wrapper': {
+                '_name': 'C_C506',
                 'ref_type': {
                     '_name': 'D_1153',
                     '_value': 'PQ'
@@ -409,18 +422,19 @@ def construct_payment_reference_data(payment_reference):
                     '_value': payment_reference
                 }
             }
-            
+
         }
     }
 
     return reference
 
+
 def construct_reference_document_data(reference_document):
     reference_doc_data = {
         '_name': 'G_SG1',
-        'wrapper':{
+        'wrapper': {
             '_name': 'S_RFF',
-            'wrapper':{
+            'wrapper': {
                 '_name': 'C_C506',
                 'document_type': {
                     '_name': 'D_1153',
@@ -436,24 +450,25 @@ def construct_reference_document_data(reference_document):
 
     return reference_doc_data
 
+
 def construct_global_discount_data(discount_amount, discount_percentage):
     discount_data = {
         '_name': 'G_SG16',
         'description': {
             '_name': 'S_ALC',
-            'type':{
-                '_name':'D_5463',
-                '_value':'A'
+            'type': {
+                '_name': 'D_5463',
+                '_value': 'A'
             },
-            'wrapper':{
+            'wrapper': {
                 '_name': 'C_C552',
                 'desc': {
-                    '_name':'D_1230',
+                    '_name': 'D_1230',
                     '_value': 'SKUPNI POPUST'
                 },
                 'type': {
-                    '_name':'D_5189',
-                    '_value': '42' #check if correct
+                    '_name': 'D_5189',
+                    '_value': '42'  # check if correct
                 }
             }
         },
@@ -464,11 +479,11 @@ def construct_global_discount_data(discount_amount, discount_percentage):
                 'wrapper': {
                     '_name': 'C_C501',
                     'type': {
-                        '_name':'D_5245',
-                        '_value':'1'
+                        '_name': 'D_5245',
+                        '_value': '1'
                     },
                     'val': {
-                        '_name':'D_5482',
+                        '_name': 'D_5482',
                         '_value': str(discount_percentage)
                     }
                 }
@@ -481,11 +496,11 @@ def construct_global_discount_data(discount_amount, discount_percentage):
                 'wrapper': {
                     '_name': 'C_C516',
                     'type': {
-                        '_name':'D_5025',
-                        '_value':'1'
+                        '_name': 'D_5025',
+                        '_value': '1'
                     },
                     'val': {
-                        '_name':'D_5004',
+                        '_name': 'D_5004',
                         '_value': str(discount_amount)
                     }
                 }
@@ -494,6 +509,7 @@ def construct_global_discount_data(discount_amount, discount_percentage):
     }
 
     return discount_data
+
 
 def construct_custom_text_data(text_format, text):
     """
@@ -521,7 +537,7 @@ def construct_custom_text_data(text_format, text):
         i = i + 1
 
         name = 'D_4440'
-        if i > 1 :
+        if i > 1:
             name = f"D_4440_{i}"
 
         custom_text['content'][f"text_{i}"] = {
@@ -535,10 +551,12 @@ def construct_custom_text_data(text_format, text):
 
     return custom_text
 
+
 def construct_item_data(item):
     data = {
         '_name': 'G_SG26',
-        '_sorting':['S_LIN', 'S_PIA', 'S_IMD', 'S_MEA', 'S_QTY', 'S_ALI', 'S_DTM', 'S_GIN', 'S_QVR', 'S_FTX', 'G_SG27', 'G_SG28', 'G_SG29', 'G_SG31', 'G_SG33', 'G_SG34', 'G_SG35', 'G_SG39', 'G_SG45', 'G_SG47'],
+        '_sorting': ['S_LIN', 'S_PIA', 'S_IMD', 'S_MEA', 'S_QTY', 'S_ALI', 'S_DTM', 'S_GIN', 'S_QVR', 'S_FTX', 'G_SG27',
+                     'G_SG28', 'G_SG29', 'G_SG31', 'G_SG33', 'G_SG34', 'G_SG35', 'G_SG39', 'G_SG45', 'G_SG47'],
         'info': {
             '_name': 'S_LIN',
             'row_num': {
@@ -562,7 +580,7 @@ def construct_item_data(item):
         },
         'quantity': {
             '_name': 'S_QTY',
-            'wrapper':{
+            'wrapper': {
                 '_name': 'C_C186',
                 'qty_type': {
                     '_name': 'D_6063',
@@ -580,9 +598,9 @@ def construct_item_data(item):
         },
         'value_before_discount': {
             '_name': 'G_SG27',
-            'wrapper':{
+            'wrapper': {
                 '_name': 'S_MOA',
-                'wrapper':{
+                'wrapper': {
                     '_name': 'C_C516',
                     'type': {
                         '_name': 'D_5025',
@@ -597,9 +615,9 @@ def construct_item_data(item):
         },
         'value_total': {
             '_name': 'G_SG27',
-            'wrapper':{
+            'wrapper': {
                 '_name': 'S_MOA',
-                'wrapper':{
+                'wrapper': {
                     '_name': 'C_C516',
                     'type': {
                         '_name': 'D_5025',
@@ -607,7 +625,7 @@ def construct_item_data(item):
                     },
                     'amount': {
                         '_name': 'D_5004',
-                        '_value':  str(item.total_with_tax)
+                        '_value': str(item.total_with_tax)
                     }
                 }
             }
@@ -616,32 +634,32 @@ def construct_item_data(item):
             '_name': 'G_SG34',
             'taxes': {
                 '_name': 'S_TAX',
-                'id':{
+                'id': {
                     '_name': 'D_5283',
                     '_value': '7'
                 },
                 'type': {
                     '_name': 'C_C241',
-                    'value':{
+                    'value': {
                         '_name': 'D_5153',
                         '_value': 'VAT'
                     }
                 },
                 'vat_percentage': {
                     '_name': 'C_C243',
-                    'value':{
+                    'value': {
                         '_name': 'D_5278',
                         '_value': str(item.tax_rate)
                     }
                 },
-                'tax_type':{
+                'tax_type': {
                     '_name': 'D_5305',
                     '_value': item.tax_rate_type
                 },
             },
             'tax_amounts_base': {
                 '_name': 'S_MOA',
-                'wrapper':{
+                'wrapper': {
                     '_name': 'C_C516',
                     'type': {
                         '_name': 'D_5025',
@@ -655,7 +673,7 @@ def construct_item_data(item):
             },
             'tax_amounts_tax': {
                 '_name': 'S_MOA',
-                'wrapper':{
+                'wrapper': {
                     '_name': 'C_C516',
                     'type': {
                         '_name': 'D_5025',
@@ -673,25 +691,25 @@ def construct_item_data(item):
     if item.ean != None:
         data['info']['ean'] = {
             '_name': 'C_C212',
-            'code':{
+            'code': {
                 '_name': 'D_7140',
                 '_value': str(item.ean)
             },
-            'type':{
+            'type': {
                 '_name': 'D_7143',
-                '_value': '0160' # type ean
+                '_value': '0160'  # type ean
             }
         }
 
     price_wo_tax = item.price_without_tax
     if item.discount_percentage:
-        price_wo_tax = price_wo_tax * Decimal(1-(item.discount_percentage/100))
+        price_wo_tax = price_wo_tax * Decimal(1 - (item.discount_percentage / 100))
 
     data['price'] = {
         '_name': 'G_SG29',
         'wrapper': {
             '_name': 'S_PRI',
-            'wrapper':{
+            'wrapper': {
                 '_name': 'C_C509',
                 'type': {
                     '_name': 'D_5125',
@@ -699,7 +717,7 @@ def construct_item_data(item):
                 },
                 'value': {
                     '_name': 'D_5118',
-                    '_value': "%.2f" %price_wo_tax
+                    '_value': "%.2f" % price_wo_tax
                 },
                 'qty': {
                     '_name': 'D_5284',
@@ -718,7 +736,7 @@ def construct_item_data(item):
             '_name': 'G_SG29',
             'wrapper': {
                 '_name': 'S_PRI',
-                'wrapper':{
+                'wrapper': {
                     '_name': 'C_C509',
                     'type': {
                         '_name': 'D_5125',
@@ -741,18 +759,18 @@ def construct_item_data(item):
         }
         data['discount'] = {
             '_name': 'G_SG39',
-            'type':{
+            'type': {
                 '_name': 'S_ALC',
                 'identification': {
                     '_name': 'D_5463',
                     '_value': 'A',  # Discount
                 }
             },
-            'percentage':{
+            'percentage': {
                 '_name': 'G_SG41',
-                'wrapper':{
+                'wrapper': {
                     '_name': 'S_PCD',
-                    'wrapper':{
+                    'wrapper': {
                         '_name': 'C_C501',
                         'type': {
                             '_name': 'D_5245',
@@ -765,11 +783,11 @@ def construct_item_data(item):
                     }
                 }
             },
-            'amount':{
+            'amount': {
                 '_name': 'G_SG42',
-                'wrapper':{
+                'wrapper': {
                     '_name': 'S_MOA',
-                    'wrapper':{
+                    'wrapper': {
                         '_name': 'C_C516',
                         'type': {
                             '_name': 'D_5025',
@@ -786,18 +804,19 @@ def construct_item_data(item):
 
     return data
 
+
 def construct_tax_summary_data(tax_summary):
     data = {
         '_name': 'G_SG52',
         'summary': {
             '_name': 'S_TAX',
-            'type':{
+            'type': {
                 '_name': 'D_5283',
                 '_value': '7'
             },
             'vat_wrapper': {
                 '_name': 'C_C241',
-                'type':{
+                'type': {
                     '_name': 'D_5153',
                     '_value': 'VAT'
                 }
@@ -816,7 +835,7 @@ def construct_tax_summary_data(tax_summary):
         },
         'amount_base': {
             '_name': 'S_MOA',
-            'wrapper':{
+            'wrapper': {
                 '_name': 'C_C516',
                 'type': {
                     '_name': 'D_5025',
@@ -830,7 +849,7 @@ def construct_tax_summary_data(tax_summary):
         },
         'amount_tax': {
             '_name': 'S_MOA',
-            'wrapper':{
+            'wrapper': {
                 '_name': 'C_C516',
                 'type': {
                     '_name': 'D_5025',
@@ -846,12 +865,13 @@ def construct_tax_summary_data(tax_summary):
 
     return data
 
-def construct_sums_data(amount, sum_type, ref=None):
+
+def construct_sums_data(amount, sum_type):
     data = {
         '_name': 'G_SG50',
         'amounts': {
             '_name': 'S_MOA',
-            'wrapper':{
+            'wrapper': {
                 '_name': 'C_C516',
                 'type': {
                     '_name': 'D_5025',
@@ -864,6 +884,5 @@ def construct_sums_data(amount, sum_type, ref=None):
             }
         }
     }
-        
 
     return data
