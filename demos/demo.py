@@ -59,8 +59,8 @@ invoice.add_tax_summary(tax_rate=22, tax_base=1.48, tax_amount=0.33)
 
 #print(invoice.render_xml())
 
-with open('demos/cert/example.pem', 'rb') as cert:
-    with open('demos/cert/example.key', 'rb') as key:
+with open('cert/example.pem', 'rb') as cert:
+    with open('cert/example.key', 'rb') as key:
         c=cert.read()
         k=key.read()
         print(invoice.render_xml(cert=c, key=k))

@@ -20,9 +20,7 @@ def sign_invoice(invoice_json, key, cert):
 
     xml_content = build_xml(invoice_json)
 
-    signed_xml = XMLSigner(signature_algorithm='rsa-sha1',
-                           digest_algorithm='sha1',
-                           c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315').sign(xml_content,
+    signed_xml = XMLSigner(c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315').sign(xml_content,
                                                                                                   key=key,
                                                                                                   cert=cert,
                                                                                                   reference_uri=['data','signprops'])
