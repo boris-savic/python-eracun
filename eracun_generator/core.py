@@ -192,7 +192,7 @@ class Invoice:
 
         self.document_items = []
 
-        self.total_without_discount = Decimal('0')
+        self.subtotal_net = Decimal('0')
 
         self.tax_summaries = []
 
@@ -226,7 +226,7 @@ class Invoice:
                                                discount_amount=discount_amount,
                                                unit=unit))
 
-        self.total_without_discount = self.total_without_discount + (quantity * price_without_tax)
+        self.subtotal_net = self.subtotal_net + total_without_tax
 
     def render_envelope(self, attachments=None, sender_bic=None, recipient_bic=None):
         """

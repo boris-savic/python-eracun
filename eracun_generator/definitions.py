@@ -46,9 +46,9 @@ def construct_invoice_json(invoice):
 
     # add final sums to invoice
     # Total without discount
-    data['invoice']['sums_without_discounts'] = construct_sums_data(amount=invoice.total_without_discount, sum_type='79')
+    data['invoice']['sums_without_discounts'] = construct_sums_data(amount=invoice.subtotal_net, sum_type='79')
     # Discounts amount
-    data['invoice']['sums_discounts'] = construct_sums_data(amount=invoice.total_without_discount - invoice.total_without_tax, sum_type='53')
+    data['invoice']['sums_discounts'] = construct_sums_data(amount=invoice.subtotal_net - invoice.total_without_tax, sum_type='53')
     # Tax base sums
     data['invoice']['sums_tax_base_amount'] = construct_sums_data(amount=invoice.total_without_tax, sum_type='125')
     # Taxes amount

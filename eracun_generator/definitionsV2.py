@@ -60,7 +60,7 @@ def construct_invoice_json(invoice):
     # Total without discount
     data['invoice']['sums_without_discounts'] = construct_sums_data(amount=invoice.total_without_discount, sum_type='79')
     # Discounts amount
-    data['invoice']['sums_discounts'] = construct_sums_data(amount=invoice.global_discount_amount, sum_type='260')
+    data['invoice']['sums_discounts'] = construct_sums_data(amount=invoice.subtotal_net - invoice.total_without_tax, sum_type='260')
     # Tax base sums
     data['invoice']['sums_tax_base_amount'] = construct_sums_data(amount=invoice.total_without_tax, sum_type='389')
     # Taxes amount
@@ -604,11 +604,11 @@ def construct_item_data(item):
                     '_name': 'C_C516',
                     'type': {
                         '_name': 'D_5025',
-                        '_value': '203'  # Total before discount
+                        '_value': '203'  # Line NET amount - including discounts and charges on line level
                     },
                     'amount': {
                         '_name': 'D_5004',
-                        '_value': "%.2f" % (item.price_without_tax * item.quantity)
+                        '_value': "%.2f" % item.total_without_tax
                     }
                 }
             }
